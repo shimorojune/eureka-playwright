@@ -134,8 +134,11 @@ class Workspace {
         if (
           pkg.packageJSON.dependencies &&
           pkg.packageJSON.dependencies[otherPackage.name]
-        )
+        ) {
+          console.log(otherPackage.name);
           pkg.packageJSON.dependencies[otherPackage.name] = version;
+        }
+
         if (
           pkg.packageJSON.devDependencies &&
           pkg.packageJSON.devDependencies[otherPackage.name]
