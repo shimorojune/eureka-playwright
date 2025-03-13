@@ -24,8 +24,8 @@ module.exports = {
       "@semantic-release/github",
       {
         assets: [
-          { path: "pw-core.tgz", label: "Playwright Core" },
-          { path: "pw.tgz", label: "Playwright" },
+          { path: "pw-core.tgz", label: "pw-core.tgz" },
+          { path: "pw.tgz", label: "pw.tgz" },
         ],
       },
     ],
