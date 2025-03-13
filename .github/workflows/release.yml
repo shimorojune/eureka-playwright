@@ -1,0 +1,35 @@
+name: "Eureka Playwright Release"
+
+on:
+  push:
+    branches:
+      - test
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.13.0"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Run semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        run: npx semantic-release
+
+      - name: Run npm pack for Playwright Core
+        run: npm pack ./packages/playwright-core
+
+      - name: Run npm pack for Playwright
+        run: npm pack ./packages/playwright
