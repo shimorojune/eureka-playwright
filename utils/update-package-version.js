@@ -11,4 +11,4 @@ packageJson.version = tagFormat;
 
 fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n');
 
-console.log(`Updated package.json version to ${tagFormat}`);
+console.log(`Updated package.json version to new version ${tagFormat}`);
