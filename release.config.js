@@ -1,5 +1,5 @@
 module.exports = {
-  branches: ["eureka-main", "main"], // The branch you release from
+  branches: ["eureka-main"], // The branch you release from
   tagFormat: "1.51.0-${version}",
   plugins: [
     "@semantic-release/commit-analyzer", // Analyzes commits to determine version bump
