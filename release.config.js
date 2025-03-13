@@ -1,6 +1,6 @@
 export default {
   branches: ["eureka-main"], // The branch you release from
-  tagformat: "1.51.0-${version}",
+  tagFormat: "1.51.0-${version}",
   plugins: [
     "@semantic-release/commit-analyzer", // Analyzes commits to determine version bump
     "@semantic-release/release-notes-generator", // Generates release notes
@@ -16,7 +16,7 @@ export default {
     [
       "@semantic-release/exec",
       {
-        prepare:
+        prepareCmd:
           "node ./utils/workspace.js --ensure-consistent && npm run build && npm pack ./packages/playwright-core && mv playwright-*.tgz pw-core.tgz && npm pack ./packages/playwright && mv playwright-*.tgz pw.tgz",
       },
     ],
@@ -24,8 +24,8 @@ export default {
       "@semantic-release/github",
       {
         assets: [
-          { path: "dist/asset.min.css", label: "Playwright Core" },
-          { path: "dist/asset.min.js", label: "Playwright" },
+          { path: "pw-core.tgz", label: "Playwright Core" },
+          { path: "pw.tgz", label: "Playwright" },
         ],
       },
     ],
