@@ -2,7 +2,7 @@ module.exports = {
   branches: ["eureka-main"], // The branch you release from
   tagFormat: "1.51.0-${version}",
   plugins: [
-    "@semantic-release/commit-analyzer", // Analyzes commits to determine version bump
+    // "@semantic-release/commit-analyzer", // Analyzes commits to determine version bump
     "@semantic-release/release-notes-generator", // Generates release notes
     "@semantic-release/changelog", // Updates the CHANGELOG.md file
     [
