@@ -135,15 +135,33 @@ class Workspace {
           pkg.packageJSON.dependencies &&
           pkg.packageJSON.dependencies[otherPackage.name]
         ) {
-          console.log(otherPackage.name);
-          pkg.packageJSON.dependencies[otherPackage.name] = version;
+          switch (otherPackage.name) {
+            case "playwright":
+              pkg.packageJSON.dependencies[otherPackage.name] = "https://github.com/shimorojune/eureka-playwright/releases/latest/download/pw.tgz";
+              break;
+            case "playwright-core":
+              pkg.packageJSON.dependencies[otherPackage.name] = "https://github.com/shimorojune/eureka-playwright/releases/latest/download/pw-core.tgz";
+              break;
+            default:
+              pkg.packageJSON.dependencies[otherPackage.name] = version;
+          }
         }
 
         if (
           pkg.packageJSON.devDependencies &&
           pkg.packageJSON.devDependencies[otherPackage.name]
-        )
-          pkg.packageJSON.devDependencies[otherPackage.name] = version;
+        ) {
+          switch (otherPackage.name) {
+            case "playwright":
+              pkg.packageJSON.devDependencies[otherPackage.name] = "https://github.com/shimorojune/eureka-playwright/releases/latest/download/pw.tgz";
+              break;
+            case "playwright-core":
+              pkg.packageJSON.devDependencies[otherPackage.name] = "https://github.com/shimorojune/eureka-playwright/releases/latest/download/pw-core.tgz";
+              break;
+            default:
+              pkg.packageJSON.devDependencies[otherPackage.name] = version;
+          }
+        }
       }
       await maybeWriteJSON(pkg.packageJSONPath, pkg.packageJSON);
     }
