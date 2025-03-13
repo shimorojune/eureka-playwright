@@ -5,7 +5,6 @@ module.exports = {
     "@semantic-release/commit-analyzer", // Analyzes commits to determine version bump
     "@semantic-release/release-notes-generator", // Generates release notes
     "@semantic-release/changelog", // Updates the CHANGELOG.md file
-    "@semantic-release/npm",
     [
       "@semantic-release/git",
       {
@@ -18,7 +17,7 @@ module.exports = {
       "@semantic-release/exec",
       {
         prepareCmd:
-          "node ./utils/workspace.js --ensure-consistent && npm run build && npm pack ./packages/playwright-core && mv playwright-*.tgz pw-core.tgz && npm pack ./packages/playwright && mv playwright-*.tgz pw.tgz",
+          "node ./utils/update-package-version.js ${nextRelease.version} && node ./utils/workspace.js --ensure-consistent && npm run build && npm pack ./packages/playwright-core && mv playwright-*.tgz pw-core.tgz && npm pack ./packages/playwright && mv playwright-*.tgz pw.tgz",
       },
     ],
     [
