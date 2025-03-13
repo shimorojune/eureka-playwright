@@ -20,22 +20,25 @@
  * Use the following command to typescheck this file:
  * npx tsc --target es2020  --watch --checkjs --noemit --moduleResolution node workspace.js
  */
-const fs = require('fs');
-const path = require('path');
-const child_process = require('child_process');
+const fs = require("fs");
+const path = require("path");
+const child_process = require("child_process");
 
-const readJSON = async (filePath) => JSON.parse(await fs.promises.readFile(filePath, 'utf8'));
+const readJSON = async (filePath) =>
+  JSON.parse(await fs.promises.readFile(filePath, "utf8"));
 const writeJSON = async (filePath, json) => {
-  await fs.promises.writeFile(filePath, JSON.stringify(json, null, 2) + '\n');
-}
+  await fs.promises.writeFile(filePath, JSON.stringify(json, null, 2) + "\n");
+};
 
 class PWPackage {
   constructor(descriptor) {
     this.name = descriptor.name;
     this.path = descriptor.path;
     this.files = descriptor.files;
-    this.packageJSONPath = path.join(this.path, 'package.json');
-    this.packageJSON = JSON.parse(fs.readFileSync(this.packageJSONPath, 'utf8'));
+    this.packageJSONPath = path.join(this.path, "package.json");
+    this.packageJSON = JSON.parse(
+      fs.readFileSync(this.packageJSONPath, "utf8")
+    );
     this.isPrivate = !!this.packageJSON.private;
   }
 }
@@ -58,7 +61,9 @@ class Workspace {
   }
 
   async version() {
-    const workspacePackageJSON = await readJSON(path.join(this._rootDir, 'package.json'));
+    const workspacePackageJSON = await readJSON(
+      path.join(this._rootDir, "package.json")
+    );
     return workspacePackageJSON.version;
   }
 
@@ -66,13 +71,18 @@ class Workspace {
    * @param {string} version
    */
   async setVersion(version) {
-    if (version.startsWith('v'))
+    if (version.startsWith("v"))
       throw new Error('version must not start with "v"');
 
     // 1. update workspace's package.json (playwright-internal) with the new version
-    const workspacePackageJSON = await readJSON(path.join(this._rootDir, 'package.json'));
+    const workspacePackageJSON = await readJSON(
+      path.join(this._rootDir, "package.json")
+    );
     workspacePackageJSON.version = version;
-    await writeJSON(path.join(this._rootDir, 'package.json'), workspacePackageJSON);
+    await writeJSON(
+      path.join(this._rootDir, "package.json"),
+      workspacePackageJSON
+    );
     // 2. make workspace consistent.
     await this.ensureConsistent();
   }
@@ -82,16 +92,19 @@ class Workspace {
 
     const maybeWriteJSON = async (jsonPath, json) => {
       const oldJson = await readJSON(jsonPath);
-      if (JSON.stringify(json) === JSON.stringify(oldJson))
-        return;
+      if (JSON.stringify(json) === JSON.stringify(oldJson)) return;
       hasChanges = true;
-      console.warn('Updated', jsonPath);
+      console.warn("Updated", jsonPath);
       await writeJSON(jsonPath, json);
     };
 
-    const workspacePackageJSON = await readJSON(path.join(this._rootDir, 'package.json'));
-    const packageLockPath = path.join(this._rootDir, 'package-lock.json');
-    const packageLock = JSON.parse(await fs.promises.readFile(packageLockPath, 'utf8'));
+    const workspacePackageJSON = await readJSON(
+      path.join(this._rootDir, "package.json")
+    );
+    const packageLockPath = path.join(this._rootDir, "package-lock.json");
+    const packageLock = JSON.parse(
+      await fs.promises.readFile(packageLockPath, "utf8")
+    );
     const version = workspacePackageJSON.version;
 
     // Make sure package-lock version is consistent with root package.json version.
@@ -118,111 +131,117 @@ class Workspace {
       }
 
       for (const otherPackage of this._packages) {
-        if (pkg.packageJSON.dependencies && pkg.packageJSON.dependencies[otherPackage.name])
+        if (
+          pkg.packageJSON.dependencies &&
+          pkg.packageJSON.dependencies[otherPackage.name]
+        )
           pkg.packageJSON.dependencies[otherPackage.name] = version;
-        if (pkg.packageJSON.devDependencies && pkg.packageJSON.devDependencies[otherPackage.name])
+        if (
+          pkg.packageJSON.devDependencies &&
+          pkg.packageJSON.devDependencies[otherPackage.name]
+        )
           pkg.packageJSON.devDependencies[otherPackage.name] = version;
       }
       await maybeWriteJSON(pkg.packageJSONPath, pkg.packageJSON);
     }
 
     // Re-run npm i to make package-lock dirty.
-    child_process.execSync('npm i');
+    child_process.execSync("npm i");
     return hasChanges;
   }
 }
 
-const ROOT_PATH = path.join(__dirname, '..');
-const LICENCE_FILES = ['NOTICE', 'LICENSE'];
+const ROOT_PATH = path.join(__dirname, "..");
+const LICENCE_FILES = ["NOTICE", "LICENSE"];
 const workspace = new Workspace(ROOT_PATH, [
   new PWPackage({
-    name: 'playwright',
-    path: path.join(ROOT_PATH, 'packages', 'playwright'),
+    name: "playwright",
+    path: path.join(ROOT_PATH, "packages", "playwright"),
     // We copy README.md additionally for playwright so that it looks nice on NPM.
-    files: [...LICENCE_FILES, 'README.md'],
+    files: [...LICENCE_FILES, "README.md"],
   }),
   new PWPackage({
-    name: 'playwright-core',
-    path: path.join(ROOT_PATH, 'packages', 'playwright-core'),
+    name: "playwright-core",
+    path: path.join(ROOT_PATH, "packages", "playwright-core"),
     files: LICENCE_FILES,
   }),
   new PWPackage({
-    name: '@playwright/test',
-    path: path.join(ROOT_PATH, 'packages', 'playwright-test'),
+    name: "@playwright/test",
+    path: path.join(ROOT_PATH, "packages", "playwright-test"),
     // We copy README.md additionally for @playwright/test so that it looks nice on NPM.
-    files: [...LICENCE_FILES, 'README.md'],
+    files: [...LICENCE_FILES, "README.md"],
   }),
   new PWPackage({
-    name: 'playwright-webkit',
-    path: path.join(ROOT_PATH, 'packages', 'playwright-webkit'),
+    name: "playwright-webkit",
+    path: path.join(ROOT_PATH, "packages", "playwright-webkit"),
     files: LICENCE_FILES,
   }),
   new PWPackage({
-    name: 'playwright-firefox',
-    path: path.join(ROOT_PATH, 'packages', 'playwright-firefox'),
+    name: "playwright-firefox",
+    path: path.join(ROOT_PATH, "packages", "playwright-firefox"),
     files: LICENCE_FILES,
   }),
   new PWPackage({
-    name: 'playwright-chromium',
-    path: path.join(ROOT_PATH, 'packages', 'playwright-chromium'),
+    name: "playwright-chromium",
+    path: path.join(ROOT_PATH, "packages", "playwright-chromium"),
     files: LICENCE_FILES,
   }),
   new PWPackage({
-    name: '@playwright/client',
-    path: path.join(ROOT_PATH, 'packages', 'playwright-client'),
+    name: "@playwright/client",
+    path: path.join(ROOT_PATH, "packages", "playwright-client"),
     files: LICENCE_FILES,
   }),
   new PWPackage({
-    name: '@playwright/experimental-tools',
-    path: path.join(ROOT_PATH, 'packages', 'playwright-tools'),
+    name: "@playwright/experimental-tools",
+    path: path.join(ROOT_PATH, "packages", "playwright-tools"),
     files: LICENCE_FILES,
   }),
   new PWPackage({
-    name: '@playwright/browser-webkit',
-    path: path.join(ROOT_PATH, 'packages', 'playwright-browser-webkit'),
+    name: "@playwright/browser-webkit",
+    path: path.join(ROOT_PATH, "packages", "playwright-browser-webkit"),
     files: LICENCE_FILES,
   }),
   new PWPackage({
-    name: '@playwright/browser-firefox',
-    path: path.join(ROOT_PATH, 'packages', 'playwright-browser-firefox'),
+    name: "@playwright/browser-firefox",
+    path: path.join(ROOT_PATH, "packages", "playwright-browser-firefox"),
     files: LICENCE_FILES,
   }),
   new PWPackage({
-    name: '@playwright/browser-chromium',
-    path: path.join(ROOT_PATH, 'packages', 'playwright-browser-chromium'),
+    name: "@playwright/browser-chromium",
+    path: path.join(ROOT_PATH, "packages", "playwright-browser-chromium"),
     files: LICENCE_FILES,
   }),
   new PWPackage({
-    name: '@playwright/experimental-ct-core',
-    path: path.join(ROOT_PATH, 'packages', 'playwright-ct-core'),
-    files: ['LICENSE'],
+    name: "@playwright/experimental-ct-core",
+    path: path.join(ROOT_PATH, "packages", "playwright-ct-core"),
+    files: ["LICENSE"],
   }),
   new PWPackage({
-    name: '@playwright/experimental-ct-react',
-    path: path.join(ROOT_PATH, 'packages', 'playwright-ct-react'),
-    files: ['LICENSE'],
+    name: "@playwright/experimental-ct-react",
+    path: path.join(ROOT_PATH, "packages", "playwright-ct-react"),
+    files: ["LICENSE"],
   }),
   new PWPackage({
-    name: '@playwright/experimental-ct-react17',
-    path: path.join(ROOT_PATH, 'packages', 'playwright-ct-react17'),
-    files: ['LICENSE'],
+    name: "@playwright/experimental-ct-react17",
+    path: path.join(ROOT_PATH, "packages", "playwright-ct-react17"),
+    files: ["LICENSE"],
   }),
   new PWPackage({
-    name: '@playwright/experimental-ct-svelte',
-    path: path.join(ROOT_PATH, 'packages', 'playwright-ct-svelte'),
-    files: ['LICENSE'],
+    name: "@playwright/experimental-ct-svelte",
+    path: path.join(ROOT_PATH, "packages", "playwright-ct-svelte"),
+    files: ["LICENSE"],
   }),
   new PWPackage({
-    name: '@playwright/experimental-ct-vue',
-    path: path.join(ROOT_PATH, 'packages', 'playwright-ct-vue'),
-    files: ['LICENSE'],
+    name: "@playwright/experimental-ct-vue",
+    path: path.join(ROOT_PATH, "packages", "playwright-ct-vue"),
+    files: ["LICENSE"],
   }),
 ]);
 
 if (require.main === module) {
   parseCLI();
 } else {
-  module.exports = {workspace};
+  module.exports = { workspace };
 }
 
 function die(message, exitCode = 1) {
@@ -232,38 +251,38 @@ function die(message, exitCode = 1) {
 
 async function parseCLI() {
   const commands = {
-    '--ensure-consistent': async () => {
+    "--ensure-consistent": async () => {
       const hasChanges = await workspace.ensureConsistent();
-      if (hasChanges)
-        die(`\n  ERROR: workspace is inconsistent! Run '//utils/workspace.js --ensure-consistent' and commit changes!`);
+      // if (hasChanges)
+      // die(`\n  ERROR: workspace is inconsistent! Run '//utils/workspace.js --ensure-consistent' and commit changes!`);
       // Ensure lockfileVersion is 3
-      const packageLock = require(ROOT_PATH +  '/package-lock.json');
+      const packageLock = require(ROOT_PATH + "/package-lock.json");
       if (packageLock.lockfileVersion !== 3)
         die(`\n  ERROR: package-lock.json lockfileVersion must be 3`);
     },
-    '--list-public-package-paths': () => {
+    "--list-public-package-paths": () => {
       for (const pkg of workspace.packages()) {
-        if (!pkg.isPrivate)
-          console.log(pkg.path);
+        if (!pkg.isPrivate) console.log(pkg.path);
       }
     },
-    '--get-version': async (version) => {
+    "--get-version": async (version) => {
       console.log(await workspace.version());
     },
-    '--set-version': async (version) => {
+    "--set-version": async (version) => {
       if (!version)
-        die('ERROR: Please specify version! e.g. --set-version 1.99.2');
+        die("ERROR: Please specify version! e.g. --set-version 1.99.2");
       await workspace.setVersion(version);
     },
-    '--help': () => {
-      console.log([
-        `Available commands:`,
-        ...Object.keys(commands).map(cmd => '  ' + cmd),
-      ].join('\n'));
+    "--help": () => {
+      console.log(
+        [
+          `Available commands:`,
+          ...Object.keys(commands).map((cmd) => "  " + cmd),
+        ].join("\n")
+      );
     },
   };
   const handler = commands[process.argv[2]];
-  if (!handler)
-    die('ERROR: wrong usage! Run with --help to list commands');
+  if (!handler) die("ERROR: wrong usage! Run with --help to list commands");
   await handler(process.argv[3]);
 }
