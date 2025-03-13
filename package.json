@@ -70,6 +70,7 @@
     "@semantic-release/exec": "^7.0.3",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^11.0.1",
+    "@semantic-release/npm": "^12.0.1",
     "@semantic-release/release-notes-generator": "^14.0.3",
     "@stylistic/eslint-plugin": "^3.0.1",
     "@types/babel__core": "^7.20.2",
