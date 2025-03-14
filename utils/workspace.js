@@ -137,10 +137,10 @@ class Workspace {
         ) {
           switch (otherPackage.name) {
             case "playwright":
-              pkg.packageJSON.dependencies[otherPackage.name] = `https://github.com/shimorojune/eureka-playwright/releases/download/1.51.1-${versionFromParams}/pw.tgz`;
+              pkg.packageJSON.dependencies[otherPackage.name] = `https://github.com/shimorojune/eureka-playwright/releases/download/${versionFromParams}/pw.tgz`;
               break;
             case "playwright-core":
-              pkg.packageJSON.dependencies[otherPackage.name] = `https://github.com/shimorojune/eureka-playwright/releases/download/1.51.1-${versionFromParams}/pw-core.tgz`;
+              pkg.packageJSON.dependencies[otherPackage.name] = `https://github.com/shimorojune/eureka-playwright/releases/download/${versionFromParams}/pw-core.tgz`;
               break;
             default:
               pkg.packageJSON.dependencies[otherPackage.name] = version;
@@ -153,10 +153,10 @@ class Workspace {
         ) {
           switch (otherPackage.name) {
             case "playwright":
-              pkg.packageJSON.devDependencies[otherPackage.name] = `https://github.com/shimorojune/eureka-playwright/releases/download/1.51.1-${versionFromParams}/pw.tgz`;
+              pkg.packageJSON.devDependencies[otherPackage.name] = `https://github.com/shimorojune/eureka-playwright/releases/download/${versionFromParams}/pw.tgz`;
               break;
             case "playwright-core":
-              pkg.packageJSON.devDependencies[otherPackage.name] = `https://github.com/shimorojune/eureka-playwright/releases/download/1.51.1-${versionFromParams}/pw-core.tgz`;
+              pkg.packageJSON.devDependencies[otherPackage.name] = `https://github.com/shimorojune/eureka-playwright/releases/download/${versionFromParams}/pw-core.tgz`;
               break;
             default:
               pkg.packageJSON.devDependencies[otherPackage.name] = version;

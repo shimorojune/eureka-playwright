@@ -10,7 +10,7 @@ module.exports = {
       "@semantic-release/exec",
       {
         prepareCmd:
-          "node ./utils/update-package-version.js ${nextRelease.version}",
+          "node ./utils/update-package-version.js 1.51.1-${nextRelease.version}",
       },
     ],
     [

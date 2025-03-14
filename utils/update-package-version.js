@@ -5,7 +5,7 @@ const packageJsonPath = path.resolve(__dirname, '../package.json');
 const packageJson = require(packageJsonPath);
 
 const newVersion = process.argv[2];
-const tagFormat = `1.51.1-${newVersion}`;
+const tagFormat = newVersion;
 
 packageJson.version = tagFormat;
 
