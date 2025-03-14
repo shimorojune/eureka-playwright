@@ -7,18 +7,25 @@ module.exports = {
     "@semantic-release/release-notes-generator", // Generates release notes
     "@semantic-release/changelog", // Updates the CHANGELOG.md file
     [
+      "@semantic-release/exec",
+      {
+        prepareCmd:
+          "node ./utils/update-package-version.js ${nextRelease.version}",
+      },
+    ],
+    [
       "@semantic-release/git",
       {
         assets: ["package.json", "package-lock.json"], // Push updated files to Git
         message:
-          "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}",
+          "chore(release): 1.51.1-${nextRelease.version} [skip ci]\n\n${nextRelease.notes}",
       },
     ],
     [
       "@semantic-release/exec",
       {
         prepareCmd:
-          "node ./utils/update-package-version.js ${nextRelease.version} && node ./utils/workspace.js --ensure-consistent && npm run build && npm pack ./packages/playwright-core && mv playwright-*.tgz pw-core.tgz && npm pack ./packages/playwright && mv playwright-*.tgz pw.tgz",
+          "node ./utils/workspace.js --ensure-consistent && npm run build && npm pack ./packages/playwright-core && mv playwright-*.tgz pw-core.tgz && npm pack ./packages/playwright && mv playwright-*.tgz pw.tgz",
       },
     ],
     [
