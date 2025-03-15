@@ -10,14 +10,7 @@ module.exports = {
       "@semantic-release/exec",
       {
         prepareCmd:
-          "node ./utils/update-package-version.js 1.51.1-${nextRelease.version}",
-      },
-    ],
-    [
-      "@semantic-release/exec",
-      {
-        prepareCmd:
-          "node ./utils/workspace.js --ensure-consistent 1.51.1-${nextRelease.version} && npm run build && npm pack ./packages/playwright-core && mv playwright-*.tgz pw-core.tgz && npm pack ./packages/playwright && mv playwright-*.tgz pw.tgz",
+          "node ./utils/update-package-version.js 1.51.1-${nextRelease.version} && node ./utils/workspace.js --ensure-consistent 1.51.1-${nextRelease.version} && npm run build && npm pack ./packages/playwright-core && mv playwright-*.tgz pw-core.tgz && npm pack ./packages/playwright && mv playwright-*.tgz pw.tgz",
       },
     ],
     [
@@ -27,6 +20,12 @@ module.exports = {
           { path: "pw-core.tgz", label: "pw-core.tgz" },
           { path: "pw.tgz", label: "pw.tgz" },
         ],
+      },
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        publishCmd: "npm i",
       },
     ],
     [
