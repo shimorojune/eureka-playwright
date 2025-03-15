@@ -167,7 +167,7 @@ class Workspace {
     }
 
     // Re-run npm i to make package-lock dirty.
-    child_process.execSync("npm i");
+    // child_process.execSync("npm i");
     return hasChanges;
   }
 }

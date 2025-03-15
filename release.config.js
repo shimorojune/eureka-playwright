@@ -14,14 +14,6 @@ module.exports = {
       },
     ],
     [
-      "@semantic-release/git",
-      {
-        assets: ["package.json", "package-lock.json"], // Push updated files to Git
-        message:
-          "chore(release): 1.51.1-${nextRelease.version} [skip ci]\n\n${nextRelease.notes}",
-      },
-    ],
-    [
       "@semantic-release/exec",
       {
         prepareCmd:
@@ -35,6 +27,21 @@ module.exports = {
           { path: "pw-core.tgz", label: "pw-core.tgz" },
           { path: "pw.tgz", label: "pw.tgz" },
         ],
+      },
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        prepareCmd:
+          "npm i",
+      },
+    ],
+    [
+      "@semantic-release/git",
+      {
+        assets: ["package.json", "package-lock.json"], // Push updated files to Git
+        message:
+          "chore(release): 1.51.1-${nextRelease.version} [skip ci]\n\n${nextRelease.notes}",
       },
     ],
   ],
