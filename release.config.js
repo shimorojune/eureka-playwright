@@ -32,7 +32,7 @@ module.exports = {
     [
       "@semantic-release/exec",
       {
-        prepareCmd:
+        publishCmd:
           "npm i",
       },
     ],
