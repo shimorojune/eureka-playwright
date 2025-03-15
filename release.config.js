@@ -30,13 +30,6 @@ module.exports = {
       },
     ],
     [
-      "@semantic-release/exec",
-      {
-        publishCmd:
-          "npm i",
-      },
-    ],
-    [
       "@semantic-release/git",
       {
         assets: ["package.json", "package-lock.json"], // Push updated files to Git
